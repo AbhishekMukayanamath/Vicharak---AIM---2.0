@@ -1,0 +1,5 @@
+{
+    "files.associations": {
+        "esp_http_client.h": "c"
+    }
+}
