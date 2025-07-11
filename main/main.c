@@ -22,6 +22,8 @@ static const char *TAG = "HTTPS_DOWNLOADER";
 static EventGroupHandle_t wifi_event_group;
 #define WIFI_CONNECTED_BIT BIT0
 
+  // -------------------------------- WIFI SECTOR -------------------------------------------------------------- //
+
 static void wifi_event_handler(void* arg, esp_event_base_t event_base,
                                int32_t event_id, void* event_data) {
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
@@ -67,6 +69,9 @@ static void wifi_init(void) {
     xEventGroupWaitBits(wifi_event_group, WIFI_CONNECTED_BIT, false, false, portMAX_DELAY);
 }
 
+
+// -------------------------------- SPIFFS PARTITION SECTOR -------------------------------------------------------------- //
+
 static void spiffs_init(void) {
     esp_vfs_spiffs_conf_t conf = {
         .base_path = "/spiffs",
@@ -81,6 +86,9 @@ static void spiffs_init(void) {
 esp_err_t _http_event_handler(esp_http_client_event_t *evt) {
     return ESP_OK;
 }
+
+
+// -------------------------------- DOWNLOAD AND SPEED CHECK SECTOR -------------------------------------------------------------- //
 
 static void download_file(void) {
     esp_http_client_config_t config = {
@@ -143,6 +151,9 @@ static void download_file(void) {
     ESP_LOGI(TAG, "Download Speed: %.2f KB/s", total_read / 1024.0 / (dl_sec > 0 ? dl_sec : 0.001));
     ESP_LOGI(TAG, "Write Speed: %.2f KB/s", total_written / 1024.0 / (wr_sec > 0 ? wr_sec : 0.001));
 }
+
+
+// -------------------------------- APP MAIN  -------------------------------------------------------------- //
 
 void app_main(void) {
     ESP_ERROR_CHECK(nvs_flash_init());
